@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from "react";
 import { View } from "react-native";
-import _ from "lodash";
 const renderTicks = ({
   ticksCount,
   boxCenterX,
@@ -31,7 +30,7 @@ const renderTicks = ({
   for (let i = 0; i < ticksCount; i++) {
     let angleStep = 360 / ticksCount;
     let curAngle = angleStep * i;
-    let curAngleDeg = _.clone(curAngle);
+    let curAngleDeg = curAngle * 1;
     if (curAngle > 180) {
       curAngle -= 360;
     }
