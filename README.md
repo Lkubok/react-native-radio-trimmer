@@ -9,6 +9,11 @@ or
 ```
 npm install react-native-radio-trimmer
 ```
+## Screenshot
+
+<p align=center>
+  <img src="sampleView.png">
+</p>
 
 ## Usage
 
