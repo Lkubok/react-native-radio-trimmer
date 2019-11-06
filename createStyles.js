@@ -1,18 +1,17 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const createStyles = ({
   dotColor,
   dotSize,
   boxSize,
   backgroundColor,
-  paddingCircle,
   textBackgroundColor,
   innerDotColor,
   innerDotSize,
   marginTop,
   pathColor,
   dotIsShadow,
-  pathIsShadow,
+  pathIsShadow
 }) => {
   return StyleSheet.create({
     radioDot: {
@@ -20,59 +19,55 @@ const createStyles = ({
       width: dotSize,
       height: dotSize,
       borderRadius: dotSize / 2,
-      position: 'absolute',
+      position: "absolute",
       shadowColor: dotIsShadow ? dotColor : null,
       shadowOffset: dotIsShadow ? { width: 1, height: 1 } : null,
       shadowOpacity: dotIsShadow ? 0.8 : null,
-      shadowRadius: dotIsShadow ? 10 : null,
+      shadowRadius: dotIsShadow ? 10 : null
     },
     viewBox: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
       marginTop: marginTop,
       backgroundColor: backgroundColor,
       shadowColor: pathIsShadow ? pathColor : null,
       shadowOffset: pathIsShadow ? { width: -10, height: 15 } : null,
       shadowOpacity: pathIsShadow ? 0.4 : null,
-      shadowRadius: pathIsShadow ? 15 : null,
+      shadowRadius: pathIsShadow ? 15 : null
     },
     radioBox: {
       width: boxSize,
       height: boxSize,
-      backgroundColor: 'transparent',
-      position: 'relative',
-      borderRadius: boxSize / 2,
+      backgroundColor: "transparent",
+      position: "relative",
+      borderRadius: boxSize / 2
     },
     changingTextBox: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'absolute',
-      top: paddingCircle,
-      left: paddingCircle,
-      width: boxSize - paddingCircle * 2,
-      height: boxSize - paddingCircle * 2,
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
       borderRadius: boxSize / 2,
-      backgroundColor: textBackgroundColor,
+      backgroundColor: textBackgroundColor
     },
     whiteDot: {
       backgroundColor: innerDotColor,
-      position: 'relative',
+      position: "relative",
       width: innerDotSize,
       height: innerDotSize,
       borderRadius: innerDotSize / 2,
       top: (dotSize - innerDotSize) / 2,
-      left: (dotSize - innerDotSize) / 2,
+      left: (dotSize - innerDotSize) / 2
     },
     tickBox: {
       width: boxSize,
       height: boxSize,
-      position: 'relative',
-      borderRadius: boxSize / 2,
+      position: "relative",
+      borderRadius: boxSize / 2
     },
     textInfo: {
-      position: 'absolute',
-    },
+      position: "absolute"
+    }
   });
 };
 

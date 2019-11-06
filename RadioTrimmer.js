@@ -1,37 +1,34 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import { Svg, Circle } from 'react-native-svg';
-import Animated from 'react-native-reanimated';
-import {
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { Text, View } from "react-native";
+import { Svg, Circle } from "react-native-svg";
+import Animated from "react-native-reanimated";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
+import PropTypes from "prop-types";
 
-import renderTicks from './renderTicks';
-import createStyles from './createStyles';
+import renderTicks from "./renderTicks";
+import createStyles from "./createStyles";
 
-const { cond, eq, call, Value, event } = Animated;
+const { call, cond, eq, event, Value } = Animated;
 export class RadioTrimmer extends Component {
   constructor(props) {
     super(props);
-    const { dotSize, boxSize, minValue } = props;
+    const { boxSize, dotSize, minValue } = props;
     this.state = {
-      dotOffsetX: boxSize / 2 - dotSize / 2,
-      dotOffsetY: 0,
-      boxMountPosX: null,
-      boxMountPosY: null,
+      angle: null,
       boxCenterX: boxSize / 2 - dotSize / 2,
       boxCenterY: boxSize / 2 - dotSize / 2,
-      radius: boxSize / 2 - dotSize / 2,
-      pureRadius: boxSize / 2,
+      boxMountPosX: null,
+      boxMountPosY: null,
       boxSize,
-      dotSize,
-      angle: null,
       calculatedText: minValue,
+      dotOffsetX: boxSize / 2 - dotSize / 2,
+      dotOffsetY: 0,
+      dotSize,
       normalizedAngle: null,
-      ticksCount: this.props.ticksCount,
+      pureRadius: boxSize / 2,
+      radius: boxSize / 2 - dotSize / 2,
+      ticksCount: this.props.ticksCount
     };
     this.absoluteX = new Value(0);
     this.absoluteY = new Value(0);
@@ -39,43 +36,41 @@ export class RadioTrimmer extends Component {
     this.onGestureEvent = event([
       {
         nativeEvent: {
-          state: this.gestureState,
-          absoluteY: this.absoluteY,
           absoluteX: this.absoluteX,
-        },
-      },
+          absoluteY: this.absoluteY,
+          state: this.gestureState
+        }
+      }
     ]);
   }
   handleLayoutChange = () => {
     this.RadioTrimmer.measure((py, px) => {
       this.setState({
-        heightFromTopOfScreen: px,
         boxMountPosY: px,
+        heightFromTopOfScreen: px
       });
     });
   };
   moving = ([curX, curY]) => {
     const {
-      dotSize,
       boxCenterX,
       boxCenterY,
       boxMountPosX,
       boxMountPosY,
-      radius,
+      dotSize,
+      radius
     } = this.state;
     const { onChangeValue } = this.props;
     const boxCenter = {
       x: boxMountPosX + boxCenterX,
-      y: boxMountPosY + boxCenterY,
+      y: boxMountPosY + boxCenterY
     };
     const pointerCurPos = {
       x: curX - dotSize / 2,
-      y: curY - dotSize / 2,
+      y: curY - dotSize / 2
     };
-    const calcX =
-      Math.cos(this.mesAngle(boxCenter, pointerCurPos)) * radius;
-    const calcY =
-      Math.sin(this.mesAngle(boxCenter, pointerCurPos)) * radius;
+    const calcX = Math.cos(this.mesAngle(boxCenter, pointerCurPos)) * radius;
+    const calcY = Math.sin(this.mesAngle(boxCenter, pointerCurPos)) * radius;
     this.setState(prev => {
       return {
         dotOffsetX: prev.boxCenterX + calcX,
@@ -85,15 +80,11 @@ export class RadioTrimmer extends Component {
           this.mesAngleDeg(boxCenter, pointerCurPos) +
           90 -
           360 *
-            Math.floor(
-              (this.mesAngleDeg(boxCenter, pointerCurPos) + 90) / 360,
-            ),
+            Math.floor((this.mesAngleDeg(boxCenter, pointerCurPos) + 90) / 360)
       };
     });
     this.calculateRadioValue();
-    onChangeValue
-      ? this.props.onChangeValue(this.state.calculatedText)
-      : null;
+    onChangeValue ? this.props.onChangeValue(this.state.calculatedText) : null;
   };
   mesAngle = (p1, p2) => {
     return Math.atan2(p2.y - p1.y, p2.x - p1.x);
@@ -109,39 +100,33 @@ export class RadioTrimmer extends Component {
     const countOfSteps = routeDistance / step;
     const oneStepLength = circuitLength / countOfSteps;
     const lengthOnArc = (normalizedAngle / 360) * circuitLength;
-
     let ValueToReturn = angle
       ? minValue + Math.ceil(lengthOnArc / oneStepLength) * step
       : minValue;
-
     this.setState({
-      calculatedText: Math.floor(ValueToReturn * accuracy) / accuracy,
+      calculatedText: Math.floor(ValueToReturn * accuracy) / accuracy
     });
   };
-
   ticksRender = () => {
     return renderTicks({ ...this.state, ...this.props });
   };
-
   render() {
     const {
-      dotColor,
-      dotSize,
       backgroundColor,
-      textBackgroundColor,
       boxSize,
-      paddingCircle,
-      innerDotSize,
+      dotColor,
+      dotIsShadow,
+      dotSize,
       innerDotColor,
-      textAfterNumber,
+      innerDotSize,
       marginTop,
       pathColor,
-      pathWidth,
       pathIsShadow,
-      dotIsShadow,
+      pathWidth,
+      textAfterNumber,
+      textBackgroundColor
     } = this.props;
-    const { dotOffsetX, dotOffsetY, calculatedText } = this.state;
-
+    const { calculatedText, dotOffsetX, dotOffsetY } = this.state;
     const styles = createStyles({
       backgroundColor,
       boxSize,
@@ -151,11 +136,10 @@ export class RadioTrimmer extends Component {
       innerDotColor,
       innerDotSize,
       marginTop,
-      paddingCircle,
       pathColor,
       pathIsShadow,
       pathWidth,
-      textBackgroundColor,
+      textBackgroundColor
     });
 
     return (
@@ -170,7 +154,7 @@ export class RadioTrimmer extends Component {
           style={styles.radioBox}
           onLayout={e => {
             this.setState({
-              boxMountPosX: e.nativeEvent.layout.x,
+              boxMountPosX: e.nativeEvent.layout.x
             });
           }}
         >
@@ -180,16 +164,16 @@ export class RadioTrimmer extends Component {
             </Text>
             <View style={styles.tickBox}>{this.ticksRender()}</View>
             <Svg
-              height={boxSize}
-              width={boxSize}
-              style={{ position: 'absolute' }}
               blurRadius={20}
+              height={boxSize}
+              style={{ position: "absolute" }}
+              width={boxSize}
             >
               <Circle
                 cx={boxSize / 2}
                 cy={boxSize / 2}
-                r={boxSize / 2 - dotSize / 2}
                 fill="transparent"
+                r={boxSize / 2 - dotSize / 2}
                 stroke={pathColor}
                 strokeWidth={pathWidth}
               />
@@ -199,7 +183,7 @@ export class RadioTrimmer extends Component {
             {() =>
               cond(
                 eq(this.gestureState, State.ACTIVE),
-                call([this.absoluteX, this.absoluteY], this.moving),
+                call([this.absoluteX, this.absoluteY], this.moving)
               )
             }
           </Animated.Code>
@@ -215,8 +199,8 @@ export class RadioTrimmer extends Component {
                 styles.radioDot,
                 {
                   top: dotOffsetY,
-                  left: dotOffsetX,
-                },
+                  left: dotOffsetX
+                }
               ]}
             >
               <View style={styles.whiteDot} />
@@ -233,14 +217,16 @@ RadioTrimmer.propTypes = {
   backgroundColor: PropTypes.string,
   boxSize: PropTypes.number,
   dotColor: PropTypes.string,
+  dotIsShadow: PropTypes.bool,
   dotSize: PropTypes.number,
   innerDotColor: PropTypes.string,
   innerDotSize: PropTypes.number,
+  marginTop: PropTypes.number,
   maxValue: PropTypes.number,
   minValue: PropTypes.number,
-  marginTop: PropTypes.number,
-  paddingCircle: PropTypes.number,
+  onChangeValue: PropTypes.func,
   pathColor: PropTypes.string,
+  pathIsShadow: PropTypes.bool,
   pathWidth: PropTypes.number,
   step: PropTypes.number,
   textAfterNumber: PropTypes.string,
@@ -251,10 +237,35 @@ RadioTrimmer.propTypes = {
   ticksCount: PropTypes.number,
   ticksCountHover: PropTypes.number,
   ticksLength: PropTypes.number,
-  ticksWidth: PropTypes.number,
-  dotIsShadow: PropTypes.bool,
-  onChangeValue: PropTypes.func,
-  pathIsShadow: PropTypes.bool,
+  ticksWidth: PropTypes.number
+};
+
+RadioTrimmer.defaultProps = {
+  accuracy: 10,
+  backgroundColor: "transparent",
+  boxSize: 200,
+  dotColor: "gray",
+  dotIsShadow: false,
+  dotSize: 24,
+  innerDotColor: "white",
+  innerDotSize: 10,
+  marginTop: 0,
+  maxValue: 108,
+  minValue: 87.5,
+  onChangeValue: null,
+  pathColor: "lightgray",
+  pathIsShadow: false,
+  pathWidth: 10,
+  step: 0.1,
+  textAfterNumber: "MHz",
+  textBackgroundColor: "transparent",
+  tickMargin: 0,
+  ticksActiveColor: "black",
+  ticksColor: "gray",
+  ticksCount: 25,
+  ticksCountHover: 5,
+  ticksLength: 15,
+  ticksWidth: 2
 };
 
 export default RadioTrimmer;
