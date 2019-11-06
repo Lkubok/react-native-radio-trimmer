@@ -1,0 +1,32 @@
+{
+  "name": "react-native-radio-trimmer",
+  "version": "0.1.0",
+  "description": "Radio trimmer for react-native",
+  "main": "index.js",
+  "scripts": {
+    "test": "yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:Lkubok/react-native-radio-trimmer.git"
+  },
+  "keywords": [
+    "react-native",
+    "radio",
+    "trimmer",
+    "circle"
+  ],
+  "dependencies": {
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "react-native": "0.61.3",
+    "react-native-gesture-handler": "1.5.0",
+    "react-native-reanimated": "1.3.0",
+    "react-native-svg": "^9.13.3",
+    "react-native-svg-transformer": "^0.13.0",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2"
+  },
+  "author": "Łukasz Kubok",
+  "license": "ISC"
+}
