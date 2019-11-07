@@ -17,49 +17,87 @@ npm install react-native-radio-trimmer
 
 ## Usage
 
+It is necessary to use onMount method, otherwise app will crash
+
 ```
 import React, { Component } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 import RadioTrimmer from 'react-native-radio-trimmer';
 
-export default class ExampleComponent extends Component {
+
+export class ExampleComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      textValue: null,
+    };
+  }
+  setValue = value => {
+    this.setState({
+      textValue: value,
+    });
+  };
+
   render() {
     return (
       <SafeAreaView>
         <Header />
         <RadioTrimmer
-          accuracy={10}
-          backgroundColor={'transparent'}
-          boxSize={200}
-          dotColor={'gray'}
-          dotSize={24}
-          innerDotColor={'white'}
-          dotIsShadow={false}
-          pathIsShadow={true}
-          innerDotSize={10}
+          boxSize={150}
           marginTop={50}
-          maxValue={108}
-          minValue={87.5}
-          paddingCircle={10}
-          pathColor={'lightgray'}
-          pathWidth={10}
-          step={0.1}
-          textAfterNumber={'MHz'}
-          textBackgroundColor={'transparent'}
-          tickMargin={0}
-          ticksActiveColor={'black'}
-          ticksColor={'gray'}
-          ticksCount={25}
-          ticksCountHover={5}
-          ticksLength={15}
-          ticksWidth={2}
-          onChangeValue={''}
-        />
+          onChangeValue={this.setValue}
+          onMount={this.setValue}
+        >
+          <View>
+            <Text>{this.state.textValue}</Text>
+          </View>
+        </RadioTrimmer>
       </SafeAreaView>
     );
   }
 }
+
+export default ExampleComponent;
 ```
+
+## Few trimmers in one row:
+```
+   <View style={{ flexDirection: 'row' }}>
+          <RadioTrimmer
+            boxSize={150}
+            marginTop={50}
+            onChangeValue={this.setValue}
+            onMount={this.setValue}
+          >
+            <View>
+              <Text>{this.state.textValue}</Text>
+            </View>
+          </RadioTrimmer>
+          <RadioTrimmer
+            boxSize={150}
+            marginTop={50}
+            onChangeValue={this.setValue}
+            onMount={this.setValue}
+          >
+            <View>
+              <Text>{this.state.textValue}</Text>
+            </View>
+          </RadioTrimmer>
+
+          <RadioTrimmer
+            boxSize={150}
+            marginTop={50}
+            onChangeValue={this.setValue}
+            onMount={this.setValue}
+          >
+            <View>
+              <Text>{this.state.textValue}</Text>
+            </View>
+          </RadioTrimmer>
+        </View>
+
+```
+
 
 ### Configuration
 ##### props:
@@ -77,6 +115,7 @@ export default class ExampleComponent extends Component {
 | maxValue | number | 108 | maximum scope value |
 | minValue | number | 87.5 | minimal scope value |
 | onChangeValue | function | null | function that is invoked on every radio text change. it return value of current text. Look at example |
+| onMount | function | null | callback function that sets initial value on parent component |
 | pathColor | string | lightgray | color of the path under the radio dot |
 | pathIsShadow | boolean | false | makes the background of radio trimmer blurred |
 | pathWidth | number | 10 | width of the path under the radio dot |
@@ -91,13 +130,20 @@ export default class ExampleComponent extends Component {
 | ticksLength | number | 15 | the height of single tick |
 | ticksWidth | number | 2 | the width of single tick  |
 
-##### onChangeValue:
+##### onChangeValue, onMount:
 ```
-handleChange = (value) =>{
-    console.log(value)
-}
+  setValue = value => {
+    this.setState({
+      textValue: value,
+    });
+  };
 
-<RadioTrimmer onChangeValue={this.handleChange}>
+<RadioTrimmer
+          boxSize={150}
+          marginTop={50}
+          onChangeValue={this.setValue}
+          onMount={this.setValue}
+        >
 ```
 
 

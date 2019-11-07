@@ -1,8 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { View, Text } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import Animated from "react-native-reanimated";
+import { getInset } from "react-native-safe-area-view";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import PropTypes from "prop-types";
 
@@ -21,8 +22,11 @@ export class RadioTrimmer extends Component {
       boxMountPosX: null,
       boxMountPosY: null,
       boxSize,
+      centerTestX: null,
+      centerTestY: null,
       calculatedText: minValue,
       dotOffsetX: boxSize / 2 - dotSize / 2,
+      heightFromTopOfScreen: getInset("top"),
       dotOffsetY: 0,
       dotSize,
       normalizedAngle: null,
@@ -43,31 +47,34 @@ export class RadioTrimmer extends Component {
       }
     ]);
   }
+  componentDidMount() {
+    this.props.onMount(this.props.minValue);
+  }
   handleLayoutChange = () => {
-    this.RadioTrimmer.measure((py, px) => {
+    this.RadioTrimmer.measure((px, py) => {
       this.setState({
-        boxMountPosY: px,
-        heightFromTopOfScreen: px
+        boxMountPosY: py
+      });
+    });
+  };
+  handleLayoutChangeX = () => {
+    this.RadioTrimmer.measure((px, py, w, h, pax, pay) => {
+      this.setState({
+        centerTestX: pax,
+        centerTestY: pay
       });
     });
   };
   moving = ([curX, curY]) => {
-    const {
-      boxCenterX,
-      boxCenterY,
-      boxMountPosX,
-      boxMountPosY,
-      dotSize,
-      radius
-    } = this.state;
+    const { heightFromTopOfScreen, radius } = this.state;
     const { onChangeValue } = this.props;
     const boxCenter = {
-      x: boxMountPosX + boxCenterX,
-      y: boxMountPosY + boxCenterY
+      x: this.state.centerTestX,
+      y: this.state.centerTestY + heightFromTopOfScreen
     };
     const pointerCurPos = {
-      x: curX - dotSize / 2,
-      y: curY - dotSize / 2
+      x: curX,
+      y: curY
     };
     const calcX = Math.cos(this.mesAngle(boxCenter, pointerCurPos)) * radius;
     const calcY = Math.sin(this.mesAngle(boxCenter, pointerCurPos)) * radius;
@@ -123,10 +130,16 @@ export class RadioTrimmer extends Component {
       pathColor,
       pathIsShadow,
       pathWidth,
-      textAfterNumber,
-      textBackgroundColor
+      textBackgroundColor,
+      children
     } = this.props;
-    const { calculatedText, dotOffsetX, dotOffsetY } = this.state;
+    const {
+      dotOffsetX,
+      dotOffsetY,
+      calculatedText,
+      boxCenterY,
+      boxCenterX
+    } = this.state;
     const styles = createStyles({
       backgroundColor,
       boxSize,
@@ -143,13 +156,7 @@ export class RadioTrimmer extends Component {
     });
 
     return (
-      <View
-        style={styles.viewBox}
-        ref={view => {
-          this.RadioTrimmer = view;
-        }}
-        onLayout={this.handleLayoutChange}
-      >
+      <View style={styles.viewBox} onLayout={this.handleLayoutChange}>
         <View
           style={styles.radioBox}
           onLayout={e => {
@@ -159,9 +166,9 @@ export class RadioTrimmer extends Component {
           }}
         >
           <View style={styles.changingTextBox}>
-            <Text style={styles.textInfo}>
-              {calculatedText} {textAfterNumber}
-            </Text>
+            <View style={styles.textInfo}>
+              {children ? children : <Text>{calculatedText}</Text>}
+            </View>
             <View style={styles.tickBox}>{this.ticksRender()}</View>
             <Svg
               blurRadius={20}
@@ -178,6 +185,17 @@ export class RadioTrimmer extends Component {
                 strokeWidth={pathWidth}
               />
             </Svg>
+            <View
+              style={{
+                position: "absolute",
+                top: boxCenterY + dotSize / 2,
+                left: boxCenterX + dotSize / 2
+              }}
+              ref={view => {
+                this.RadioTrimmer = view;
+              }}
+              onLayout={this.handleLayoutChangeX}
+            />
           </View>
           <Animated.Code>
             {() =>
@@ -216,6 +234,7 @@ RadioTrimmer.propTypes = {
   accuracy: PropTypes.number,
   backgroundColor: PropTypes.string,
   boxSize: PropTypes.number,
+  children: PropTypes.Component,
   dotColor: PropTypes.string,
   dotIsShadow: PropTypes.bool,
   dotSize: PropTypes.number,
@@ -225,6 +244,7 @@ RadioTrimmer.propTypes = {
   maxValue: PropTypes.number,
   minValue: PropTypes.number,
   onChangeValue: PropTypes.func,
+  onMount: PropTypes.func,
   pathColor: PropTypes.string,
   pathIsShadow: PropTypes.bool,
   pathWidth: PropTypes.number,
