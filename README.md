@@ -9,11 +9,47 @@ or
 ```
 npm install react-native-radio-trimmer
 ```
-## Screenshot
+## Working examples
 
+### ticksColor
 <p align=center>
-  <img src="sampleView.png">
-</p>
+  <img src="./gifs/colorOfTicks.gif">
+</p> 
+
+### ticksCount
+<p align=center>
+  <img src="./gifs/countTicks.gif">
+</p> 
+
+### dotColor
+<p align=center>
+  <img src="./gifs/dotColor.gif">
+</p> 
+
+### ticksCountHover
+<p align=center>
+  <img src="./gifs/countHoverTicks.gif">
+</p> 
+
+### ticksLength
+<p align=center>
+  <img src="./gifs/tickLength.gif">
+</p> 
+
+### ticksWidth
+<p align=center>
+  <img src="./gifs/tickWidth.gif">
+</p> 
+
+### dotIsShadow
+<p align=center>
+  <img src="./gifs/shadow1.gif">
+</p> 
+
+### pathColor
+<p align=center>
+  <img src="./gifs/pathColor.gif">
+</p> 
 
 ## Usage
 
@@ -99,8 +135,8 @@ export default ExampleComponent;
 ```
 
 
-### Configuration
-##### props:
+## Configuration
+### props:
 | Property | Type | Default | Description |
 |---------------|----------|-------------|----------------------------------------------------------------|
 | accuracy | number | 10 | accuracy of result. 10 will result with 0.1, 0.5, etc |
@@ -130,7 +166,7 @@ export default ExampleComponent;
 | ticksLength | number | 15 | the height of single tick |
 | ticksWidth | number | 2 | the width of single tick  |
 
-##### onChangeValue, onMount:
+### onChangeValue, onMount:
 ```
   setValue = value => {
     this.setState({
