@@ -1,6 +1,6 @@
 {
   "name": "react-native-radio-trimmer",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "description": "Radio trimmer for react-native",
   "main": "index.js",
   "scripts": {
@@ -31,6 +31,3 @@
   "author": "Łukasz Kubok",
   "license": "ISC"
 }
-
-
-
