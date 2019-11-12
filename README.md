@@ -154,6 +154,7 @@ export default ExampleComponent;
 | Property | Type | Default | Description |
 |---------------|----------|-------------|----------------------------------------------------------------|
 | accuracy | number | 10 | accuracy of result. 10 will result with 0.1, 0.5, etc |
+| allowTap | boolean | true | when tapped on a trimmer it changes value to the tapped place|
 | backgroundColor | string | transparent | background color of box with Radio Trimmer |
 | boxSize | number | 200 | size of box containing the Radio Trimmer |
 | dotColor | string | gray | color of radio dot |

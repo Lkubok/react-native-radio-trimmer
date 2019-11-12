@@ -4,7 +4,11 @@ import { View, Text } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import Animated from "react-native-reanimated";
 import { getInset } from "react-native-safe-area-view";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  TapGestureHandler,
+  State
+} from "react-native-gesture-handler";
 import PropTypes from "prop-types";
 
 import renderTicks from "./renderTicks";
@@ -32,7 +36,8 @@ export class RadioTrimmer extends Component {
       normalizedAngle: null,
       pureRadius: boxSize / 2,
       radius: boxSize / 2 - dotSize / 2,
-      ticksCount: this.props.ticksCount
+      ticksCount: this.props.ticksCount,
+      moveInterval: null
     };
     this.absoluteX = new Value(0);
     this.absoluteY = new Value(0);
@@ -64,6 +69,10 @@ export class RadioTrimmer extends Component {
         centerTestY: pay
       });
     });
+  };
+  handleTap = e => {
+    const { absoluteX, absoluteY } = e.nativeEvent;
+    this.moving([absoluteX, absoluteY]);
   };
   moving = ([curX, curY]) => {
     const { heightFromTopOfScreen, radius } = this.state;
@@ -156,82 +165,88 @@ export class RadioTrimmer extends Component {
     });
 
     return (
-      <View style={styles.viewBox} onLayout={this.handleLayoutChange}>
-        <View
-          style={styles.radioBox}
-          onLayout={e => {
-            this.setState({
-              boxMountPosX: e.nativeEvent.layout.x
-            });
-          }}
-        >
-          <View style={styles.changingTextBox}>
-            <View style={styles.textInfo}>
-              {children ? children : <Text>{calculatedText}</Text>}
-            </View>
-            <View style={styles.tickBox}>{this.ticksRender()}</View>
-            <Svg
-              blurRadius={20}
-              height={boxSize}
-              style={{ position: "absolute" }}
-              width={boxSize}
-            >
-              <Circle
-                cx={boxSize / 2}
-                cy={boxSize / 2}
-                fill="transparent"
-                r={boxSize / 2 - dotSize / 2}
-                stroke={pathColor}
-                strokeWidth={pathWidth}
-              />
-            </Svg>
-            <View
-              style={{
-                position: "absolute",
-                top: boxCenterY + dotSize / 2,
-                left: boxCenterX + dotSize / 2
-              }}
-              ref={view => {
-                this.RadioTrimmer = view;
-              }}
-              onLayout={this.handleLayoutChangeX}
-            />
-          </View>
-          <Animated.Code>
-            {() =>
-              cond(
-                eq(this.gestureState, State.ACTIVE),
-                call([this.absoluteX, this.absoluteY], this.moving)
-              )
-            }
-          </Animated.Code>
-
-          <PanGestureHandler
-            maxpointerCurPoss={1}
-            minDist={10}
-            onGestureEvent={this.onGestureEvent}
-            onHandlerStateChange={this.onGestureEvent}
+      <TapGestureHandler
+        onHandlerStateChange={this.props.allowTap ? this.handleTap : null}
+        maxDurationMs={400}
+      >
+        <View style={styles.viewBox} onLayout={this.handleLayoutChange}>
+          <View
+            style={styles.radioBox}
+            onLayout={e => {
+              this.setState({
+                boxMountPosX: e.nativeEvent.layout.x
+              });
+            }}
           >
-            <Animated.View
-              style={[
-                styles.radioDot,
-                {
-                  top: dotOffsetY,
-                  left: dotOffsetX
-                }
-              ]}
+            <View style={styles.changingTextBox}>
+              <View style={styles.textInfo}>
+                {children ? children : <Text>{calculatedText}</Text>}
+              </View>
+              <View style={styles.tickBox}>{this.ticksRender()}</View>
+              <Svg
+                blurRadius={20}
+                height={boxSize}
+                style={{ position: "absolute" }}
+                width={boxSize}
+              >
+                <Circle
+                  cx={boxSize / 2}
+                  cy={boxSize / 2}
+                  fill="transparent"
+                  r={boxSize / 2 - dotSize / 2}
+                  stroke={pathColor}
+                  strokeWidth={pathWidth}
+                />
+              </Svg>
+              <View
+                style={{
+                  position: "absolute",
+                  top: boxCenterY + dotSize / 2,
+                  left: boxCenterX + dotSize / 2
+                }}
+                ref={view => {
+                  this.RadioTrimmer = view;
+                }}
+                onLayout={this.handleLayoutChangeX}
+              />
+            </View>
+            <Animated.Code>
+              {() =>
+                cond(
+                  eq(this.gestureState, State.ACTIVE),
+                  call([this.absoluteX, this.absoluteY], this.moving)
+                )
+              }
+            </Animated.Code>
+
+            <PanGestureHandler
+              maxpointerCurPoss={1}
+              minDist={10}
+              onGestureEvent={this.onGestureEvent}
+              onHandlerStateChange={this.onGestureEvent}
             >
-              <View style={styles.whiteDot} />
-            </Animated.View>
-          </PanGestureHandler>
+              <Animated.View
+                style={[
+                  styles.radioDot,
+                  {
+                    top: dotOffsetY,
+                    left: dotOffsetX
+                  }
+                ]}
+              >
+                <View style={styles.whiteDot} />
+              </Animated.View>
+            </PanGestureHandler>
+          </View>
         </View>
-      </View>
+      </TapGestureHandler>
     );
   }
 }
 
 RadioTrimmer.propTypes = {
   accuracy: PropTypes.number,
+  allowTap: PropTypes.bool,
   backgroundColor: PropTypes.string,
   boxSize: PropTypes.number,
   children: PropTypes.Component,
@@ -262,6 +277,7 @@ RadioTrimmer.propTypes = {
 
 RadioTrimmer.defaultProps = {
   accuracy: 10,
+  allowTap: true,
   backgroundColor: "transparent",
   boxSize: 200,
   dotColor: "gray",
