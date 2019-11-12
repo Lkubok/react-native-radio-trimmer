@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { View, Text } from "react-native";
 import { Svg, Circle } from "react-native-svg";
 import Animated from "react-native-reanimated";
-import { getInset } from "react-native-safe-area-view";
+// import { getInset } from "react-native-safe-area-view";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import PropTypes from "prop-types";
 
@@ -26,7 +26,7 @@ export class RadioTrimmer extends Component {
       centerTestY: null,
       calculatedText: minValue,
       dotOffsetX: boxSize / 2 - dotSize / 2,
-      heightFromTopOfScreen: getInset("top"),
+      heightFromTopOfScreen: 50,
       dotOffsetY: 0,
       dotSize,
       normalizedAngle: null,
