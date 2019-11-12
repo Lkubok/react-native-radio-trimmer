@@ -2,6 +2,8 @@
 
 
 ## Installation
+
+## package installation
 ```
 yarn add react-native-radio-trimmer
 ```
@@ -9,6 +11,18 @@ or
 ```
 npm install react-native-radio-trimmer
 ```
+### install dependencies
+you need to install additional libs in your project locally
+```
+yarn add react-native-svg@9.13.3
+yarn add react-native-safe-area-view@0.14.8
+
+```
+### install pods in your project folder
+```
+cd ios && pod install && cd ../
+```
+
 ## Working examples
 
 ### ticksColor
