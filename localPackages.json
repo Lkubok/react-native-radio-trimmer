@@ -1,0 +1,15 @@
+
+
+//local
+"bar": "file:../foo/bar"
+
+//tag
+"jscs": "jscs-dev/node-jscs#v1.12.0",
+
+//branch 
+
+"hangPAck": "gitadress/lkubok/hangPackage#develop"
+
+//commit 
+
+"commitPAck": "package.git#commit"

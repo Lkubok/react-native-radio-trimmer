@@ -4,7 +4,10 @@
   "description": "Radio trimmer for react-native",
   "main": "index.js",
   "scripts": {
-    "test": "yarn test"
+    "test": "yarn test",
+    "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
+    "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
+    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
   },
   "repository": {
     "type": "git",
@@ -17,19 +20,20 @@
     "circle"
   ],
   "dependencies": {
-    "react-native-svg": "^9.13.3",
-    "react-native-safe-area-view": "^0.14.8"
+    "react-native-safe-area-view": "^0.14.8",
+    "react-native-svg": "^9.13.3"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": "*",
-    "react-native-gesture-handler": "*"
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*"
   },
   "devDependencies": {
-    "metro-react-native-babel-preset": "^0.56.0",
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
+    "generate-changelog": "^1.8.0",
+    "metro-react-native-babel-preset": "^0.56.0",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
